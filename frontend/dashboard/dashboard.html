@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINDR | Student Dashboard</title>
+    <title>FINDR | Campus Lost & Found</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styledash.css">
@@ -22,7 +22,8 @@
 
             <ul class="nav-links hide-on-mobile">
                 <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#my-reports">My Reports</a></li>
+                <!-- Nav link dynamically labeled for student vs staff -->
+                <li><a href="#main-section" id="nav-main-link">My Reports</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#contact">Contact</a></li>
                 
@@ -38,7 +39,7 @@
                 <li class="user-pill-item">
                     <div class="user-pill">
                         <i class="fa-solid fa-user-graduate" id="user-role-icon"></i>
-                        <span id="user-display-name">Student</span>
+                        <span id="user-display-name">User</span>
                     </div>
                 </li>
 
@@ -72,7 +73,7 @@
         </div>
         <ul class="sidebar-links">
             <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
-            <li><a href="#my-reports" onclick="toggleSidebar()">My Reports</a></li>
+            <li><a href="#main-section" id="sidebar-main-link" onclick="toggleSidebar()">My Reports</a></li>
             <li><a href="#how-it-works" onclick="toggleSidebar()">How It Works</a></li>
             <li><a href="#contact" onclick="toggleSidebar()">Contact Us</a></li>
             <li><a href="#" id="sidebar-logout-btn" onclick="toggleSidebar()">Logout</a></li>
@@ -111,16 +112,19 @@
                     <h1 class="hero-title">FINDR</h1>
                     <h2 class="hero-subtitle">Fast Item Notification, Detection, and Recovery</h2>
                     <p class="hero-description">
-                        The official lost and found platform for Cainta Catholic College. Report, track, and recover your lost items all in one place.
+                        The official lost and found platform for Cainta Catholic College. Report, track, and recover lost campus items with real-time detection and matching.
                     </p>
                     <div class="hero-buttons">
+                        <!-- Student Button (hidden for staff) -->
                         <button type="button" class="btn btn-dark" id="btn-open-lost-modal">
                             <i class="fa-solid fa-magnifying-glass"></i> Lost Something?
                         </button>
+                        <!-- Found Button: Student sees info card, Staff opens logging form -->
                         <button type="button" class="btn btn-yellow" id="btn-open-found-modal">
                             <i class="fa-solid fa-box-open"></i> Found Something?
                         </button>
-                        <a href="#my-reports" class="btn btn-white">
+                        <!-- Action link: Student tracks reports, Staff opens tables -->
+                        <a href="#main-section" class="btn btn-white" id="hero-action-link">
                             <i class="fa-regular fa-clipboard"></i> Track My Report
                         </a>
                     </div>
@@ -138,9 +142,11 @@
             </div>
         </section>
 
-        <!-- Student Reports Section -->
-        <section class="reports-section" id="my-reports">
-            <div class="section-container">
+        <!-- ========================================== -->
+        <!-- VIEW 1: STUDENT VIEW (Default for Students) -->
+        <!-- ========================================== -->
+        <section class="reports-section" id="student-section">
+            <div class="section-container" id="main-section">
                 <div class="section-header-flex">
                     <div>
                         <h2 class="section-title">My Reported Missing Items</h2>
@@ -164,6 +170,179 @@
                     <div class="loading-state">
                         <i class="fa-solid fa-spinner fa-spin"></i>
                         <p>Loading your reports...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: STAFF VIEW (Displayed for Staff)   -->
+        <!-- ========================================== -->
+        <section class="reports-section" id="staff-section" style="display: none;">
+            <div class="section-container">
+                <div class="section-header-flex">
+                    <div>
+                        <h2 class="section-title">Staff Management Hub</h2>
+                        <p class="section-desc">Manage campus found inventory, monitor student reports, and process verified claims.</p>
+                    </div>
+                    <button class="btn btn-yellow" id="btn-staff-quick-log">
+                        <i class="fa-solid fa-box-archive"></i> Log Found Item
+                    </button>
+                </div>
+
+                <!-- Staff Statistics Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div>
+                            <span class="stat-value" id="stat-found-count">0</span>
+                            <span class="stat-label">Lost Items (Found)</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-gold">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <div>
+                            <span class="stat-value" id="stat-missing-count">0</span>
+                            <span class="stat-label">Missing Reports</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-amber">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                        <div>
+                            <span class="stat-value" id="stat-matches-count">0</span>
+                            <span class="stat-label">Pending Verifications</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <span class="stat-value" id="stat-returned-count">0</span>
+                            <span class="stat-label">Returned Items</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Table Navigation Tabs -->
+                <div class="staff-tabs">
+                    <button class="staff-tab-btn active" data-tab="lost-items">
+                        <i class="fa-solid fa-box"></i> Found Items Table
+                    </button>
+                    <button class="staff-tab-btn" data-tab="missing-items">
+                        <i class="fa-solid fa-clipboard-list"></i> Missing Reports Table
+                    </button>
+                    <button class="staff-tab-btn" data-tab="matches-verif">
+                        <i class="fa-solid fa-handshake-angle"></i> Matches & Verification
+                    </button>
+                    <button class="staff-tab-btn" data-tab="returned-items">
+                        <i class="fa-solid fa-circle-check"></i> Returned Items Table
+                    </button>
+                </div>
+
+                <!-- Staff Table Search & Filters -->
+                <div class="table-search-bar">
+                    <div class="search-input-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="staff-table-search" placeholder="Search by item name, category, brand, or student...">
+                    </div>
+                    <span class="table-records-info" id="table-records-info">Showing records</span>
+                </div>
+
+                <!-- Staff Data Tables Container -->
+                <div class="table-card">
+                    <!-- Tab Pane 1: Lost Item Tickets -->
+                    <div class="table-pane active" id="pane-lost-items">
+                        <div class="table-responsive">
+                            <table class="data-table" id="table-lost-items">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Item Name</th>
+                                        <th>Category</th>
+                                        <th>Date Found</th>
+                                        <th>Location Found</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="7" class="table-loading">Loading records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 2: Missing Tickets -->
+                    <div class="table-pane" id="pane-missing-items">
+                        <div class="table-responsive">
+                            <table class="data-table" id="table-missing-items">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Student ID</th>
+                                        <th>Student Name</th>
+                                        <th>Item Name</th>
+                                        <th>Category</th>
+                                        <th>Date Lost</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="8" class="table-loading">Loading records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 3: Matches & Verification -->
+                    <div class="table-pane" id="pane-matches-verif">
+                        <div class="table-responsive">
+                            <table class="data-table" id="table-matches">
+                                <thead>
+                                    <tr>
+                                        <th>Match ID</th>
+                                        <th>Missing Ticket (Student)</th>
+                                        <th>Found Item (Staff)</th>
+                                        <th>Score</th>
+                                        <th>Match Status</th>
+                                        <th>In-Person Verification</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="6" class="table-loading">Loading records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 4: Returned Items -->
+                    <div class="table-pane" id="pane-returned-items">
+                        <div class="table-responsive">
+                            <table class="data-table" id="table-returned-items">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Item Name</th>
+                                        <th>Category</th>
+                                        <th>Date Found</th>
+                                        <th>Location Found</th>
+                                        <th>Logged By</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="7" class="table-loading">Loading records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -388,6 +567,181 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-yellow w-100" id="close-found-info-btn">Got it, thank you!</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: "Found Something?" (Staff Found Item Logging Form) -->
+    <div class="modal-overlay" id="staff-found-modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-subtitle">Staff Inventory Intake</span>
+                    <h3 class="modal-title">Log Found Item</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="close-staff-found-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="staff-found-item-form" class="modal-form" enctype="multipart/form-data">
+                <p class="form-hint">Fields with asterisk (*) are required.</p>
+                
+                <div class="form-group">
+                    <label for="staff-item-name">ITEM NAME *</label>
+                    <input type="text" id="staff-item-name" name="item_name" placeholder="e.g. Casio fx-991ES Plus calculator" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-category">CATEGORY *</label>
+                    <select id="staff-category" name="category" required>
+                        <option value="" disabled selected>Select a category...</option>
+                        <option value="ID & Cards">ID & Cards</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Bags">Bags</option>
+                        <option value="School Supplies">School Supplies</option>
+                        <option value="Books">Books</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Sports Gear">Sports Gear</option>
+                        <option value="Personal Items">Personal Items</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="staff-brand">BRAND</label>
+                        <input type="text" id="staff-brand" name="brand" placeholder="e.g. Casio">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="staff-color">COLOR</label>
+                        <input type="text" id="staff-color" name="color" placeholder="e.g. Black">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="staff-date-found">DATE FOUND *</label>
+                        <input type="date" id="staff-date-found" name="date_found" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="staff-time-found">TIME FOUND</label>
+                        <input type="text" id="staff-time-found" name="time_found" placeholder="e.g. Around 11:00 AM">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-location-found">LOCATION FOUND *</label>
+                    <input type="text" id="staff-location-found" name="location_found" placeholder="e.g. Balbago room 204 or SHS canteen" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-description">DESCRIPTION & IDENTIFYING CHARACTERISTICS</label>
+                    <textarea id="staff-description" name="description" rows="3" placeholder="e.g. Serial numbers, stickers, condition, contents"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-status">STATUS *</label>
+                    <select id="staff-status" name="status" required>
+                        <option value="unclaimed" selected>Unclaimed (Default)</option>
+                        <option value="pending_verification">Pending Verification</option>
+                        <option value="claimed">Claimed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-photo">PHOTO UPLOAD (Optional, max 5 MB)</label>
+                    <div class="file-drop-area">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span class="file-msg">Choose photo or drag & drop</span>
+                        <input type="file" id="staff-photo" name="photo" accept=".jpg,.jpeg,.png,.webp,.gif">
+                    </div>
+                    <span id="staff-file-name-preview" class="file-name-preview"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-staff-found-btn">Cancel</button>
+                    <button type="submit" class="btn btn-yellow" id="submit-staff-found-btn">
+                        <span>Save & Run Matcher</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Staff Update Ticket Modal (No Delete) -->
+    <div class="modal-overlay" id="staff-update-modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-subtitle">Staff Controls (No Delete Allowed)</span>
+                    <h3 class="modal-title" id="update-modal-title">Update Record</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="close-update-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="staff-update-form" class="modal-form">
+                <input type="hidden" id="update-record-type" value="">
+                <input type="hidden" id="update-record-id" value="">
+
+                <div class="form-group">
+                    <label for="update-item-name">ITEM NAME *</label>
+                    <input type="text" id="update-item-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-category">CATEGORY *</label>
+                    <select id="update-category" required>
+                        <option value="ID & Cards">ID & Cards</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Bags">Bags</option>
+                        <option value="School Supplies">School Supplies</option>
+                        <option value="Books">Books</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Sports Gear">Sports Gear</option>
+                        <option value="Personal Items">Personal Items</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="update-brand">BRAND</label>
+                        <input type="text" id="update-brand">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="update-color">COLOR</label>
+                        <input type="text" id="update-color">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-location">LOCATION</label>
+                    <input type="text" id="update-location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-status">STATUS *</label>
+                    <select id="update-status" required>
+                        <!-- Dynamic options loaded based on ticket type -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-description">DESCRIPTION</label>
+                    <textarea id="update-description" rows="3"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-update-btn">Cancel</button>
+                    <button type="submit" class="btn btn-yellow" id="submit-update-btn">
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -89,12 +89,12 @@
 
 ## Stage 6 — Frontend: Staff Pages
 
-- [ ] Staff dashboard — summary counts (Lost Items, Missing Tickets, Returned)
-- [ ] "Found Something?" form page — Lost Item Ticket form
-- [ ] Lost Items table — all tickets, Update only (no Delete)
-- [ ] Missing Items table — all student tickets, Update only
-- [ ] Returned Items table — claimed items, Update only
-- [ ] Staff notifications page
+- [x] Staff dashboard — summary counts (Lost Items, Missing Tickets, Returned)
+- [x] "Found Something?" form page — Lost Item Ticket form
+- [x] Lost Items table — all tickets, Update only (no Delete)
+- [x] Missing Items table — all student tickets, Update only
+- [x] Returned Items table — claimed items, Update only
+- [x] Staff notifications page
 
 ---
 
