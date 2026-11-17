@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINDR | Home</title>
+    <title>FINDR | Student Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styledash.css">
 </head>
 <body>
 
+    <!-- Fixed Header -->
     <header class="navbar-wrapper">
         <nav class="navbar">
             <div class="brand">
@@ -21,32 +22,89 @@
 
             <ul class="nav-links hide-on-mobile">
                 <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#my-reports">My Reports</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+                
+                <!-- Notification Bell -->
+                <li>
+                    <button class="notif-btn" id="notif-toggle-btn" aria-label="Notifications" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notif-badge" id="notif-badge" style="display: none;">0</span>
+                    </button>
+                </li>
+
+                <!-- User Profile Pill -->
+                <li class="user-pill-item">
+                    <div class="user-pill">
+                        <i class="fa-solid fa-user-graduate" id="user-role-icon"></i>
+                        <span id="user-display-name">Student</span>
+                    </div>
+                </li>
+
                 <li><a href="#" class="btn-logout" id="logout-btn">Logout</a></li>
             </ul>
 
-            <button class="menu-button" onclick="toggleSidebar()" aria-label="Open menu">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <div class="mobile-actions">
+                <button class="notif-btn" id="mobile-notif-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="mobile-notif-badge" style="display: none;">0</span>
+                </button>
+                <button class="menu-button" onclick="toggleSidebar()" aria-label="Open menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </nav>
     </header>
 
+    <!-- Mobile Sidebar -->
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <button class="close-button" onclick="toggleSidebar()" aria-label="Close menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
+        <div class="sidebar-user">
+            <i class="fa-solid fa-circle-user"></i>
+            <div>
+                <strong id="sidebar-user-name">Loading...</strong>
+                <span id="sidebar-user-role">Student</span>
+            </div>
+        </div>
         <ul class="sidebar-links">
             <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
+            <li><a href="#my-reports" onclick="toggleSidebar()">My Reports</a></li>
             <li><a href="#how-it-works" onclick="toggleSidebar()">How It Works</a></li>
             <li><a href="#contact" onclick="toggleSidebar()">Contact Us</a></li>
             <li><a href="#" id="sidebar-logout-btn" onclick="toggleSidebar()">Logout</a></li>
         </ul>
     </aside>
 
-    <main>
+    <!-- Notification Drawer -->
+    <div class="drawer-overlay" id="notif-overlay"></div>
+    <aside class="notif-drawer" id="notif-drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">
+                <i class="fa-regular fa-bell"></i>
+                <h3>Notifications</h3>
+            </div>
+            <div class="drawer-actions">
+                <button class="btn-text" id="mark-all-read-btn">Mark all read</button>
+                <button class="btn-close-drawer" id="close-notif-btn" aria-label="Close notifications">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <div class="notif-list" id="notif-list">
+            <div class="empty-state">
+                <i class="fa-regular fa-bell-slash"></i>
+                <p>No notifications yet</p>
+            </div>
+        </div>
+    </aside>
 
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="hero-container">
                 <div class="hero-text">
@@ -56,13 +114,13 @@
                         The official lost and found platform for Cainta Catholic College. Report, track, and recover your lost items all in one place.
                     </p>
                     <div class="hero-buttons">
-                        <a href="#" class="btn btn-dark">
+                        <button type="button" class="btn btn-dark" id="btn-open-lost-modal">
                             <i class="fa-solid fa-magnifying-glass"></i> Lost Something?
-                        </a>
-                        <a href="#" class="btn btn-yellow">
+                        </button>
+                        <button type="button" class="btn btn-yellow" id="btn-open-found-modal">
                             <i class="fa-solid fa-box-open"></i> Found Something?
-                        </a>
-                        <a href="#" class="btn btn-white">
+                        </button>
+                        <a href="#my-reports" class="btn btn-white">
                             <i class="fa-regular fa-clipboard"></i> Track My Report
                         </a>
                     </div>
@@ -80,6 +138,38 @@
             </div>
         </section>
 
+        <!-- Student Reports Section -->
+        <section class="reports-section" id="my-reports">
+            <div class="section-container">
+                <div class="section-header-flex">
+                    <div>
+                        <h2 class="section-title">My Reported Missing Items</h2>
+                        <p class="section-desc">Track the real-time status and matching progress of your lost items.</p>
+                    </div>
+                    <button class="btn btn-yellow" id="btn-quick-report">
+                        <i class="fa-solid fa-plus"></i> Report Lost Item
+                    </button>
+                </div>
+
+                <!-- Status Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-filter="all">All (<span id="count-all">0</span>)</button>
+                    <button class="tab-btn" data-filter="open">Open (<span id="count-open">0</span>)</button>
+                    <button class="tab-btn" data-filter="matched">Matched (<span id="count-matched">0</span>)</button>
+                    <button class="tab-btn" data-filter="resolved">Resolved (<span id="count-resolved">0</span>)</button>
+                </div>
+
+                <!-- Tickets Grid -->
+                <div class="tickets-grid" id="tickets-grid">
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Loading your reports...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How FINDR Works Section -->
         <section class="how-it-works" id="how-it-works">
             <div class="section-header">
                 <h2 class="section-title">How FINDR Works</h2>
@@ -93,7 +183,7 @@
                         <span class="step-badge">1</span>
                     </div>
                     <h3 class="step-title">Report</h3>
-                    <p class="step-text">Submit a lost or found item report.</p>
+                    <p class="step-text">Submit a lost item report with key details.</p>
                 </div>
 
                 <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
@@ -104,7 +194,7 @@
                         <span class="step-badge">2</span>
                     </div>
                     <h3 class="step-title">Match</h3>
-                    <p class="step-text">The system looks for possible matches.</p>
+                    <p class="step-text">System matches with turned-in items.</p>
                 </div>
 
                 <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
@@ -115,7 +205,7 @@
                         <span class="step-badge">3</span>
                     </div>
                     <h3 class="step-title">Get Notified</h3>
-                    <p class="step-text">Receive real-time updates on your report.</p>
+                    <p class="step-text">Receive alerts when a potential match is found.</p>
                 </div>
 
                 <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
@@ -126,7 +216,7 @@
                         <span class="step-badge">4</span>
                     </div>
                     <h3 class="step-title">Verify</h3>
-                    <p class="step-text">Confirm ownership with school personnel.</p>
+                    <p class="step-text">Verify ownership in-person at the L&F office.</p>
                 </div>
 
                 <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
@@ -137,12 +227,174 @@
                         <span class="step-badge">5</span>
                     </div>
                     <h3 class="step-title">Claim</h3>
-                    <p class="step-text">Safely retrieve your lost item.</p>
+                    <p class="step-text">Safely retrieve your item from staff.</p>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- Modal 1: "Lost Something?" (Student Missing Report Form) -->
+    <div class="modal-overlay" id="lost-modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-subtitle">Missing Item Report</span>
+                    <h3 class="modal-title">Lost Something?</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="close-lost-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="lost-item-form" class="modal-form" enctype="multipart/form-data">
+                <p class="form-hint">Fields with asterisk (*) are required.</p>
+                
+                <div class="form-group">
+                    <label for="item-name">ITEM NAME *</label>
+                    <input type="text" id="item-name" name="item_name" placeholder="e.g. Black Casio scientific calculator" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">CATEGORY *</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Select a category...</option>
+                        <option value="ID & Cards">ID & Cards</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Bags">Bags</option>
+                        <option value="School Supplies">School Supplies</option>
+                        <option value="Books">Books</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Sports Gear">Sports Gear</option>
+                        <option value="Personal Items">Personal Items</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="brand">BRAND</label>
+                        <input type="text" id="brand" name="brand" placeholder="e.g. Casio">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="color">COLOR</label>
+                        <input type="text" id="color" name="color" placeholder="e.g. Black">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="date-lost">DATE LOST *</label>
+                        <input type="date" id="date-lost" name="date_lost" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="time-lost">APPROXIMATE TIME LOST</label>
+                        <input type="text" id="time-lost" name="time_lost" placeholder="e.g. Around 10:30 AM">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="locations">POSSIBLE LOCATIONS WHERE LOST *</label>
+                    <input type="text" id="locations" name="locations" placeholder="e.g. Library, Balbago building, or Canteen" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">DESCRIPTION AND IDENTIFYING CHARACTERISTICS</label>
+                    <textarea id="description" name="description" rows="3" placeholder="e.g. size, appearance, contents, condition, owner's initials, stickers, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">PHOTO UPLOAD (Optional, max 5 MB)</label>
+                    <div class="file-drop-area">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span class="file-msg">Choose photo or drag & drop</span>
+                        <input type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png,.webp,.gif">
+                    </div>
+                    <span id="file-name-preview" class="file-name-preview"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-lost-btn">Cancel</button>
+                    <button type="submit" class="btn btn-dark" id="submit-lost-btn">
+                        <span>Submit Lost Report</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: "Found Something?" (Student Static Info Card) -->
+    <div class="modal-overlay" id="found-info-modal-overlay">
+        <div class="modal-container info-modal-container">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-subtitle">Honest CCian Guide</span>
+                    <h3 class="modal-title">Found an Item on Campus?</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="close-found-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="info-modal-body">
+                <div class="info-hero-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h4>Thank you for being honest!</h4>
+                    <p>To ensure items are safely returned to their rightful owners, students turn in found items directly to school authorities.</p>
+                </div>
+
+                <div class="info-steps-list">
+                    <div class="info-step">
+                        <div class="step-num">1</div>
+                        <div>
+                            <strong>Bring the item to the Lost and Found Office</strong>
+                            <p>Located at Balbago Building, Ground Floor (near the Prefect / Guidance Office).</p>
+                        </div>
+                    </div>
+
+                    <div class="info-step">
+                        <div class="step-num">2</div>
+                        <div>
+                            <strong>Hand it to the staff on duty</strong>
+                            <p>Inform the staff where and when you found the item.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-step">
+                        <div class="step-num">3</div>
+                        <div>
+                            <strong>Staff logs it into FINDR</strong>
+                            <p>The system immediately scans for registered missing reports.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-step">
+                        <div class="step-num">4</div>
+                        <div>
+                            <strong>Owner is notified</strong>
+                            <p>The matched student will be alerted to verify ownership in person.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-footer-note">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Office Hours: Monday to Friday, 8:00 AM – 4:00 PM</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-yellow w-100" id="close-found-info-btn">Got it, thank you!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Footer -->
     <footer id="contact">
         <div class="footer-container">
             <div class="footer-brand">

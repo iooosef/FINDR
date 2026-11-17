@@ -80,10 +80,10 @@
 
 ## Stage 5 — Frontend: Student Pages
 
-- [ ] Student dashboard — list of own Missing Tickets + status badges
-- [ ] "Lost Something?" form page — all fields, photo upload, validation
-- [ ] "Found Something?" — static info page (steps to visit L&F office)
-- [ ] Notifications page — list of match alerts (no lost item details shown)
+- [x] Student dashboard — list of own Missing Tickets + status badges
+- [x] "Lost Something?" form page — all fields, photo upload, validation
+- [x] "Found Something?" — static info page (steps to visit L&F office)
+- [x] Notifications page — list of match alerts (no lost item details shown)
 
 ---
 
