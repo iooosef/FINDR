@@ -88,8 +88,9 @@ def on_startup():
 # Serve uploaded item photos at /uploads/...
 app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 
-# Serve frontend static assets (CSS, JS, SVG images)
-app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+# Serve assets (SVG icons, logos) at /assets/...
+if (FRONTEND_DIR / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIR / "assets")), name="assets")
 
 
 @app.get("/", include_in_schema=False)
@@ -104,6 +105,18 @@ def serve_login():
     return RedirectResponse(url="/")
 
 
+@app.get("/style.css", include_in_schema=False)
+def serve_login_css():
+    """Serves login stylesheet."""
+    return FileResponse(FRONTEND_DIR / "style.css", media_type="text/css")
+
+
+@app.get("/script.js", include_in_schema=False)
+def serve_login_js():
+    """Serves login script."""
+    return FileResponse(FRONTEND_DIR / "script.js", media_type="application/javascript")
+
+
 @app.get("/dashboard", include_in_schema=False)
 def serve_dashboard(request: Request):
     """
@@ -113,6 +126,20 @@ def serve_dashboard(request: Request):
     if "user_id" not in request.session:
         return RedirectResponse(url="/")
     return FileResponse(FRONTEND_DIR / "dashboard" / "dashboard.html")
+
+
+@app.get("/styledash.css", include_in_schema=False)
+@app.get("/dashboard/styledash.css", include_in_schema=False)
+def serve_dashboard_css():
+    """Serves dashboard stylesheet."""
+    return FileResponse(FRONTEND_DIR / "dashboard" / "styledash.css", media_type="text/css")
+
+
+@app.get("/scriptdash.js", include_in_schema=False)
+@app.get("/dashboard/scriptdash.js", include_in_schema=False)
+def serve_dashboard_js():
+    """Serves dashboard script."""
+    return FileResponse(FRONTEND_DIR / "dashboard" / "scriptdash.js", media_type="application/javascript")
 
 
 @app.get("/api/health")
