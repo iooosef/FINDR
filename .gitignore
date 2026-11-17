@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+
+# Environment variables & secrets
+.env
+backend/.env
+
+# AI & project spec notes
+GEMINI.md
+
+# SQLite Database
+*.db
+*.sqlite3
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Uploaded files
+backend/uploads/
+uploads/
+
+# OS-generated files
+.DS_Store
+Thumbs.db

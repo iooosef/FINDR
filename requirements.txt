@@ -1,0 +1,24 @@
+﻿# Web framework
+fastapi==0.111.0
+
+# ASGI server that runs FastAPI
+uvicorn[standard]==0.29.0
+
+# Powers FastAPI under the hood; provides SessionMiddleware for cookies
+starlette==0.37.2
+
+# Signs the session cookie so it can't be tampered with
+itsdangerous==2.2.0
+
+# Hashes and verifies passwords securely using bcrypt
+bcrypt==4.0.1
+passlib==1.7.4
+
+# Required by FastAPI to handle file uploads (photos)
+python-multipart==0.0.9
+
+# Loads secrets from the .env file into the app
+python-dotenv==1.0.1
+
+# Lets FastAPI save uploaded files without freezing the server
+aiofiles==23.2.1
