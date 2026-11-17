@@ -7,6 +7,7 @@ backend/.env
 
 # AI & project spec notes
 GEMINI.md
+DEVELOPMENT.md
 
 # SQLite Database
 *.db
