@@ -100,9 +100,9 @@
 
 ## Stage 7 — Polish & Deployment
 
-- [ ] Remove all `#about` links and About references from every file
-- [ ] Mobile responsive check on all pages
-- [ ] Input validation on all forms (frontend + backend)
-- [ ] Photo upload working end-to-end (5 MB limit enforced)
-- [ ] Final Render deploy — test full flow: register → report → match → notify
-- [ ] Seed script confirmed to auto-run on fresh Render deploy
+- [x] Remove all `#about` links and About references from every file
+- [x] Mobile responsive check on all pages
+- [x] Input validation on all forms (frontend + backend)
+- [x] Photo upload working end-to-end (5 MB limit enforced)
+- [x] Final Render deploy — test full flow: register → report → match → notify
+- [x] Seed script confirmed to auto-run on fresh Render deploy
