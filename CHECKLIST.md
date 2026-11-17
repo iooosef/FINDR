@@ -58,13 +58,13 @@
 
 ## Stage 3 — Backend: Tickets & Matching
 
-- [ ] `routes/tickets.py` — Missing ticket CRUD (student)
-- [ ] `routes/tickets.py` — Lost item ticket CRUD (staff)
-- [ ] `utils/matcher.py` — Matching algorithm (category + fuzzy fields)
-- [ ] Matching triggered on new Missing Ticket creation
-- [ ] Matching triggered on new Lost Item Ticket creation
-- [ ] Conflict handling: multiple students → one lost item → `pending_verification`
-- [ ] `routes/notifications.py` — Get and mark-as-read
+- [x] `routes/tickets.py` — Missing ticket CRUD (student)
+- [x] `routes/tickets.py` — Lost item ticket CRUD (staff)
+- [x] `utils/matcher.py` — Matching algorithm (category + fuzzy fields)
+- [x] Matching triggered on new Missing Ticket creation
+- [x] Matching triggered on new Lost Item Ticket creation
+- [x] Conflict handling: multiple students → one lost item → `pending_verification`
+- [x] `routes/notifications.py` — Get and mark-as-read
 
 ---
 

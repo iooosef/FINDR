@@ -20,6 +20,9 @@ from starlette.middleware.sessions import SessionMiddleware
 # Import database seed script to auto-initialize on startup
 from backend.seed import init_db
 from backend.auth import router as auth_router
+from backend.routes.tickets import router as tickets_router
+from backend.routes.matches import router as matches_router
+from backend.routes.notifications import router as notifications_router
 
 # ==========================================
 # Configuration & Secrets
@@ -123,6 +126,9 @@ def health_check():
 # ==========================================
 
 app.include_router(auth_router)
+app.include_router(tickets_router)
+app.include_router(matches_router)
+app.include_router(notifications_router)
 
 
 # If executed directly with 'python backend/main.py'
