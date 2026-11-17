@@ -121,6 +121,32 @@ def init_db():
     else:
         print(f"Staff account '{staff_username}' already exists.")
 
+    # Seed sample student accounts
+    sample_students = [
+        {
+            "username": "2026-0001",
+            "full_name": "Juan Dela Cruz",
+            "password": "studentpassword123"
+        },
+        {
+            "username": "2026-0002",
+            "full_name": "Maria Clara Santos",
+            "password": "studentpassword123"
+        }
+    ]
+
+    for student in sample_students:
+        cursor.execute("SELECT id FROM users WHERE username = ?", (student["username"],))
+        if not cursor.fetchone():
+            hashed_student_pw = hash_password(student["password"])
+            cursor.execute(
+                "INSERT INTO users (username, full_name, role, password_hash) VALUES (?, ?, 'student', ?)",
+                (student["username"], student["full_name"], hashed_student_pw)
+            )
+            print(f"Student account created: ID='{student['username']}', Name='{student['full_name']}', Password='{student['password']}'")
+        else:
+            print(f"Student account '{student['username']}' already exists.")
+
     conn.commit()
     conn.close()
     print(f"Database setup complete at: {DB_PATH}")
