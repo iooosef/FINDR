@@ -47,12 +47,12 @@
 
 ## Stage 2 — Backend: Auth & Core API
 
-- [ ] `database.py` — SQLite connection helper
-- [ ] `models.py` — All 5 table schemas as SQL strings
-- [ ] `auth.py` — `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`
-- [ ] Session middleware wired into `main.py`
-- [ ] Role-based route guards working (student vs staff)
-- [ ] `seed.py` auto-called on startup if DB is missing
+- [x] `database.py` — SQLite connection helper
+- [x] `models.py` — All 5 table schemas as SQL strings
+- [x] `auth.py` — `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`
+- [x] Session middleware wired into `main.py`
+- [x] Role-based route guards working (student vs staff)
+- [x] `seed.py` auto-called on startup if DB is missing
 
 ---
 
