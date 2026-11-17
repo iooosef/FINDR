@@ -21,10 +21,9 @@
 
             <ul class="nav-links hide-on-mobile">
                 <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#about">About</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#contact">Contact Us</a></li>
-                <li><a href="#" class="btn-logout">Logout</a></li>
+                <li><a href="#" class="btn-logout" id="logout-btn">Logout</a></li>
             </ul>
 
             <button class="menu-button" onclick="toggleSidebar()" aria-label="Open menu">
@@ -40,10 +39,9 @@
         </button>
         <ul class="sidebar-links">
             <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
-            <li><a href="#about" onclick="toggleSidebar()">About</a></li>
             <li><a href="#how-it-works" onclick="toggleSidebar()">How It Works</a></li>
             <li><a href="#contact" onclick="toggleSidebar()">Contact Us</a></li>
-            <li><a href="#" onclick="toggleSidebar()">Logout</a></li>
+            <li><a href="#" id="sidebar-logout-btn" onclick="toggleSidebar()">Logout</a></li>
         </ul>
     </aside>
 
@@ -156,7 +154,6 @@
             </div>
 
             <ul class="footer-links">
-                <li><a href="#about">About FINDR</a></li>
                 <li><a href="#privacy-policy">Privacy Policy</a></li>
                 <li><a href="#terms-of-use">Terms of Use</a></li>
                 <li><a href="#contact">Contact Us</a></li>
@@ -164,6 +161,7 @@
         </div>
     </footer>
 
+    <script src="scriptdash.js"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');

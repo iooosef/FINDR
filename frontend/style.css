@@ -1,14 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
 :root {
-    --primary: #0A2540;
-    --primary-hover: #0a355f;
-    --gold-start: #dabe62;
-    --gold-end: #cea931;
-    --text-dark: #1e293b;
-    --text-muted: #64748b;
-    --bg-input: #f8fafc;
-    --border-color: #e2e8f0;
+    /* Brand Palette centered on #FFCE1B */
+    --gold-main: #FFCE1B;
+    --gold-hover: #E5B710;
+    --gold-dark: #C89C06;
+    --gold-light: #FFF6D6;
+
+    --navy-main: #0B2038;
+    --navy-hover: #133256;
+    --navy-dark: #071626;
+
+    --bg-dark: #0A192F;
+    --bg-light: #F8FAFC;
+    --card-bg: #FFFFFF;
+
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --border-color: #E2E8F0;
+
+    --error-color: #DC2626;
+    --error-bg: #FEE2E2;
+    --success-color: #059669;
+    --success-bg: #D1FAE5;
+
+    --shadow-soft: 0 10px 30px rgba(11, 32, 56, 0.15);
+    --shadow-strong: 0 20px 45px rgba(11, 32, 56, 0.25);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -23,11 +40,12 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     position: relative;
-    z-index: 1; 
-    background-color: #0f172a;
+    z-index: 1;
+    background-color: var(--bg-dark);
+    padding: 20px;
 }
 
 body::before {
@@ -35,106 +53,187 @@ body::before {
     position: absolute;
     inset: 0;
     background-image: url("https://hnlint.com.vn/wp-content/uploads/2023/10/CCC-Collge.jpg");
-    background-repeat: no-repeat; 
-    background-size: cover;        
-    background-position: center; 
-    overflow: hidden;
-    opacity: 0.35;
-    filter: blur(4px);
-    z-index: -1; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    filter: blur(5px);
+    z-index: -1;
 }
 
 .container {
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background-color: var(--card-bg);
+    border-radius: 24px;
+    box-shadow: var(--shadow-strong);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: 820px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 520px;
+    border: 1px solid rgba(255, 206, 27, 0.2);
 }
 
 .container form {
-    background-color: #fff;
+    background-color: var(--card-bg);
     display: flex;
     align-items: center;
-    gap: 10px;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
+    padding: 30px 45px;
     height: 100%;
+    text-align: center;
+}
+
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.form-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.brand-badge span {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--navy-main);
 }
 
 .container h1 {
-    font-size: 25px;
-    margin-bottom: 10px;
-    color: #333;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--navy-main);
+    margin-bottom: 4px;
 }
 
-.container span {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 10px;
+.form-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: block;
 }
 
-.container input {
-    background-color: #eee;
-    border: 1px solid transparent;
-    margin: 8px 0;
-    padding: 12px 15px;
+/* Alert Notification Banner */
+.alert-box {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.25s ease;
+}
+
+.alert-box.error {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.alert-box.success {
+    background-color: var(--success-bg);
+    color: var(--success-color);
+    border: 1px solid rgba(5, 150, 105, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input Fields */
+.input-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
     font-size: 14px;
-    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.input-group input {
+    background-color: var(--bg-light);
+    border: 1.5px solid var(--border-color);
+    padding: 12px 14px 12px 40px;
+    font-size: 13.5px;
+    border-radius: 12px;
     width: 100%;
     outline: none;
-    transition: all 0.3s ease;
+    color: var(--text-primary);
+    transition: var(--transition);
 }
 
-.container input:focus {
-    border: 1.5px solid #0A2540;
-    box-shadow: 0 0 5px rgba(0, 0, 128, 0.5);
+.input-group input:focus {
+    border-color: var(--gold-main);
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(255, 206, 27, 0.25);
 }
 
-.container a {
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    margin: 15px 0 10px;
+.input-group input:focus + i,
+.input-group:focus-within i {
+    color: var(--navy-main);
 }
 
-.container a:hover {
-    text-decoration: underline;
-}
-
-.container button {
-    background-color: #0A2540;
-    color: #fff;
-    font-size: 14px;
-    padding: 10px 45px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+/* Submit Button */
+.container button[type="submit"] {
+    background-color: var(--navy-main);
+    color: #FFFFFF;
+    font-size: 13.5px;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
     margin-top: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    width: 100%;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(11, 32, 56, 0.2);
 }
 
-.container button:hover {
-    background-color: #082b4e;
+.container button[type="submit"]:hover {
+    background-color: var(--navy-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(11, 32, 56, 0.3);
 }
 
-.container button.hidden {
-    background-color: transparent;
-    border-color: #fff;
+.container button[type="submit"]:active {
+    transform: translateY(0);
 }
 
+.container button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Sliding Panels */
 .form-container {
     position: absolute;
     top: 0;
     height: 100%;
-    transition: all 0.6s ease-in-out;
+    transition: all 0.6s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .sign-in {
@@ -179,25 +278,26 @@ body::before {
     width: 50%;
     height: 100%;
     overflow: hidden;
-    transition: all 0.6s ease-in-out;
-    border-radius: 150px 0 0 100px;
+    transition: all 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    border-radius: 120px 0 0 80px;
     z-index: 1000;
 }
 
 .container.active .toggle-container {
     transform: translateX(-100%);
-    border-radius: 0 150px 100px 0;
+    border-radius: 0 120px 80px 0;
 }
 
+/* Vibrant Gold Gradient */
 .toggle {
-    background: linear-gradient(to right, #dabe62, #cea931);
-    color: #fff;
+    background: linear-gradient(135deg, #FFDE59 0%, #FFCE1B 50%, #F59E0B 100%);
+    color: var(--navy-main);
     position: relative;
     left: -100%;
     height: 100%;
     width: 200%;
     transform: translateX(0);
-    transition: all 0.6s ease-in-out;
+    transition: all 0.6s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .container.active .toggle {
@@ -212,17 +312,60 @@ body::before {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 30px;
+    padding: 0 40px;
     text-align: center;
     top: 0;
     transform: translateX(0);
-    transition: all 0.6s ease-in-out;
+    transition: all 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.toggle-logo {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(11, 32, 56, 0.15);
+}
+
+.toggle-panel h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--navy-main);
+    margin-bottom: 8px;
 }
 
 .toggle-panel p {
-    font-size: 14px;
-    line-height: 20px;
-    margin: 15px 0;
+    font-size: 13.5px;
+    line-height: 22px;
+    color: #1E293B;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+/* Button on toggle panel */
+.btn-toggle {
+    background-color: var(--navy-main);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 12px 36px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 14px rgba(11, 32, 56, 0.25);
+}
+
+.btn-toggle:hover {
+    background-color: transparent;
+    color: var(--navy-main);
+    border-color: var(--navy-main);
+    transform: translateY(-2px);
 }
 
 .toggle-left {
@@ -240,4 +383,17 @@ body::before {
 
 .container.active .toggle-right {
     transform: translateX(20%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        min-height: 580px;
+    }
+    .container form {
+        padding: 20px 24px;
+    }
+    .toggle-panel {
+        padding: 0 20px;
+    }
 }

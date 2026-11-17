@@ -1,17 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --primary: #0A2540;
-    --primary-hover: #0d3257;
-    --accent-yellow: #F4BE19;
-    --accent-yellow-hover: #e0ac10;
-    --text-dark: #1e293b;
-    --text-muted: #64748b;
-    --text-light: #f8fafc;
-    --white: #ffffff;
-    --border-color: #e2e8f0;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --primary: #0B2038;
+    --primary-hover: #133256;
+    --accent-yellow: #FFCE1B;
+    --accent-yellow-hover: #E5B710;
+    --accent-gold-dark: #C89C06;
+    --text-dark: #0F172A;
+    --text-muted: #64748B;
+    --text-light: #F8FAFC;
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;
+    --shadow-sm: 0 2px 8px rgba(11, 32, 56, 0.06);
+    --shadow-md: 0 8px 20px rgba(11, 32, 56, 0.1);
     --transition: all 0.25s ease-in-out;
 }
 

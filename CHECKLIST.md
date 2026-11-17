@@ -70,11 +70,11 @@
 
 ## Stage 4 — Frontend: Login Page
 
-- [ ] Clean up prototype `index.html` — remove About links
-- [ ] Sign In form wired to `POST /api/auth/login`
-- [ ] Sign Up form wired to `POST /api/auth/register`
-- [ ] On success: redirect to `/dashboard` (role-based redirect from server)
-- [ ] Error messages shown on bad credentials
+- [x] Clean up prototype `index.html` — remove About links
+- [x] Sign In form wired to `POST /api/auth/login`
+- [x] Sign Up form wired to `POST /api/auth/register`
+- [x] On success: redirect to `/dashboard` (role-based redirect from server)
+- [x] Error messages shown on bad credentials
 
 ---
 

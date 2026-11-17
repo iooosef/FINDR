@@ -3,45 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <title>FINDR | Login</title>
+    <title>FINDR | Login & Register</title>
 </head>
 <body>
 
     <div class="container" id="container">
+        <!-- Sign Up Form (Students Only) -->
         <div class="form-container sign-up">
-            <form id="form">
+            <form id="signup-form" autocomplete="off">
+                <div class="brand-badge">
+                    <img src="https://www.caintacatholiccollege.edu.ph/wp-content/uploads/2023/09/seal2-1.png" alt="CCC Logo" class="form-logo">
+                    <span>FINDR</span>
+                </div>
                 <h1>Create Account</h1>
-                <span>Use your Student ID to register</span>
-                <input type="text" placeholder="Name" id="name-input" required>
-                <input type="text" placeholder="ID Number" id="idnumber-input" required>
-                <input type="password" placeholder="Password" id="password-input" required>
-                <button type="submit">Sign Up</button>
+                <span class="form-subtitle">Use your Student ID to register</span>
+
+                <div id="signup-alert" class="alert-box" style="display: none;"></div>
+
+                <div class="input-group">
+                    <i class="fa-regular fa-user"></i>
+                    <input type="text" placeholder="Full Name" id="name-input" required autocomplete="name">
+                </div>
+                <div class="input-group">
+                    <i class="fa-regular fa-id-card"></i>
+                    <input type="text" placeholder="Student ID Number" id="idnumber-input" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="Password (min. 4 chars)" id="password-input" minlength="4" required autocomplete="new-password">
+                </div>
+                <button type="submit" id="signup-submit-btn">
+                    <span>Sign Up</span>
+                </button>
             </form>
         </div>
 
+        <!-- Sign In Form (Students & Staff) -->
         <div class="form-container sign-in">
-            <form id="signin-form">
+            <form id="signin-form" autocomplete="off">
+                <div class="brand-badge">
+                    <img src="https://www.caintacatholiccollege.edu.ph/wp-content/uploads/2023/09/seal2-1.png" alt="CCC Logo" class="form-logo">
+                    <span>FINDR</span>
+                </div>
                 <h1>Sign In</h1>
-                <span>Enter your login details</span>
-                <input type="text" placeholder="ID Number" id="signin-idnumber" required>
-                <input type="password" placeholder="Password" id="signin-password" required>
-                <a href="#">Forgot Your Password?</a>
-                <button type="submit">Sign In</button>
+                <span class="form-subtitle">Enter your Student ID or Staff Username</span>
+
+                <div id="signin-alert" class="alert-box" style="display: none;"></div>
+
+                <div class="input-group">
+                    <i class="fa-regular fa-id-card"></i>
+                    <input type="text" placeholder="ID Number / Username" id="signin-idnumber" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="Password" id="signin-password" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="signin-submit-btn">
+                    <span>Sign In</span>
+                </button>
             </form>
         </div>
 
+        <!-- Sliding Overlay Panels -->
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
+                    <img src="https://www.caintacatholiccollege.edu.ph/wp-content/uploads/2023/09/seal2-1.png" alt="CCC Crest" class="toggle-logo">
                     <h1>Welcome Back!</h1>
-                    <p>Log in with your CCC account to check your reported items, view matches, or manage your account.</p>
-                    <button type="button" class="hidden" id="login">Sign In</button>
+                    <p>Log in to track your missing items, view match notifications, or manage the campus inventory.</p>
+                    <button type="button" class="btn-toggle" id="login">Sign In</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <h1>Hello, fellow CCian!</h1>
-                    <p>Register using your student ID to report or search for lost items on campus.</p>
-                    <button type="button" class="hidden" id="register">Sign Up</button>
+                    <img src="https://www.caintacatholiccollege.edu.ph/wp-content/uploads/2023/09/seal2-1.png" alt="CCC Crest" class="toggle-logo">
+                    <h1>Hello, CCian!</h1>
+                    <p>Register with your Student ID to report lost items and receive instant recovery alerts.</p>
+                    <button type="button" class="btn-toggle" id="register">Sign Up</button>
                 </div>
             </div>
         </div>
