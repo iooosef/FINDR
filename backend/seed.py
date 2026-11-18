@@ -50,7 +50,6 @@ def init_db():
         time_lost   TEXT,                -- e.g. "Around 10:30 AM"
         locations   TEXT NOT NULL,       -- free text e.g. "Library, Canteen"
         description TEXT,
-        photo_path  TEXT,                -- relative path to uploaded file
         status      TEXT NOT NULL DEFAULT 'open'
                         CHECK(status IN ('open', 'matched', 'resolved')),
         created_at  TEXT DEFAULT (datetime('now')),
@@ -71,7 +70,6 @@ def init_db():
         time_found     TEXT,
         location_found TEXT NOT NULL,
         description    TEXT,
-        photo_path     TEXT,
         status         TEXT NOT NULL DEFAULT 'unclaimed'
                            CHECK(status IN ('unclaimed', 'pending_verification', 'claimed')),
         created_at     TEXT DEFAULT (datetime('now')),

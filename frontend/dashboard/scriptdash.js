@@ -33,8 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cancelLostBtn = document.getElementById('cancel-lost-btn');
     const lostItemForm = document.getElementById('lost-item-form');
     const submitLostBtn = document.getElementById('submit-lost-btn');
-    const photoInput = document.getElementById('photo');
-    const fileNamePreview = document.getElementById('file-name-preview');
 
     const foundInfoModalOverlay = document.getElementById('found-info-modal-overlay');
     const closeFoundModalBtn = document.getElementById('close-found-modal-btn');
@@ -54,8 +52,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cancelStaffFoundBtn = document.getElementById('cancel-staff-found-btn');
     const staffFoundItemForm = document.getElementById('staff-found-item-form');
     const submitStaffFoundBtn = document.getElementById('submit-staff-found-btn');
-    const staffPhotoInput = document.getElementById('staff-photo');
-    const staffFileNamePreview = document.getElementById('staff-file-name-preview');
 
     const staffUpdateModalOverlay = document.getElementById('staff-update-modal-overlay');
     const closeUpdateModalBtn = document.getElementById('close-update-modal-btn');
@@ -301,10 +297,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const statusLabel = t.status === 'open' ? 'Open' :
                                 t.status === 'matched' ? 'Match Found' : 'Resolved';
 
-            const photoHtml = t.photo_path
-                ? `<img src="${t.photo_path}" alt="${t.item_name}" class="ticket-photo-thumb" loading="lazy">`
-                : '';
-
             const matchCalloutHtml = t.status === 'matched'
                 ? `
                 <div class="match-alert-callout">
@@ -346,7 +338,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ` : ''}
                     </ul>
 
-                    ${photoHtml}
                     ${matchCalloutHtml}
 
                     <div class="ticket-footer">
@@ -379,7 +370,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         lostModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
         lostItemForm.reset();
-        fileNamePreview.textContent = '';
     }
 
     if (btnOpenLostModal) btnOpenLostModal.addEventListener('click', openLostModal);
@@ -389,21 +379,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     lostModalOverlay.addEventListener('click', (e) => {
         if (e.target === lostModalOverlay) closeLostModal();
-    });
-
-    photoInput.addEventListener('change', () => {
-        if (photoInput.files.length > 0) {
-            const file = photoInput.files[0];
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('File size exceeds 5 MB limit.', 'error');
-                photoInput.value = '';
-                fileNamePreview.textContent = '';
-                return;
-            }
-            fileNamePreview.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-        } else {
-            fileNamePreview.textContent = '';
-        }
     });
 
     lostItemForm.addEventListener('submit', async (e) => {
@@ -720,28 +695,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         staffFoundModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
         staffFoundItemForm.reset();
-        staffFileNamePreview.textContent = '';
     }
 
     if (closeStaffFoundModalBtn) closeStaffFoundModalBtn.addEventListener('click', closeStaffFoundModal);
     if (cancelStaffFoundBtn) cancelStaffFoundBtn.addEventListener('click', closeStaffFoundModal);
     staffFoundModalOverlay.addEventListener('click', (e) => {
         if (e.target === staffFoundModalOverlay) closeStaffFoundModal();
-    });
-
-    staffPhotoInput.addEventListener('change', () => {
-        if (staffPhotoInput.files.length > 0) {
-            const file = staffPhotoInput.files[0];
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('File size exceeds 5 MB limit.', 'error');
-                staffPhotoInput.value = '';
-                staffFileNamePreview.textContent = '';
-                return;
-            }
-            staffFileNamePreview.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-        } else {
-            staffFileNamePreview.textContent = '';
-        }
     });
 
     staffFoundItemForm.addEventListener('submit', async (e) => {

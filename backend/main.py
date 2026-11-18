@@ -32,10 +32,6 @@ from backend.routes.notifications import router as notifications_router
 BACKEND_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BACKEND_DIR.parent
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
-UPLOADS_DIR = BACKEND_DIR / "uploads"
-
-# Ensure uploads directory exists for photo attachments
-UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Load environment variables from backend/.env (or root .env if present)
 load_dotenv(BACKEND_DIR / ".env")
@@ -84,9 +80,6 @@ def on_startup():
 # ==========================================
 # Static Files & Frontend Routing
 # ==========================================
-
-# Serve uploaded item photos at /uploads/...
-app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 
 # Serve assets (SVG icons, logos) at /assets/...
 if (FRONTEND_DIR / "assets").exists():

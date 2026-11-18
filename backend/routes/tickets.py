@@ -17,10 +17,8 @@ Note: Delete endpoints are intentionally omitted per system specification.
 """
 
 import os
-import uuid
-from pathlib import Path
 from typing import Optional, List
-from fastapi import APIRouter, Request, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Request, HTTPException, status, Form
 from pydantic import BaseModel
 
 from backend.database import get_db
@@ -30,50 +28,13 @@ from backend.utils.matcher import run_matcher_for_missing_ticket, run_matcher_fo
 
 router = APIRouter(prefix="/api/tickets", tags=["tickets"])
 
-# Maximum allowed file upload size: 5 MB
-MAX_FILE_SIZE = 5 * 1024 * 1024
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-UPLOADS_DIR = Path(__file__).resolve().parent.parent / "uploads"
-
-
-async def save_uploaded_photo(file: Optional[UploadFile]) -> Optional[str]:
-    """
-    Validates and saves an uploaded photo file.
-    Returns relative path string '/uploads/filename.ext' or None if no file was uploaded.
-    """
-    if not file or not file.filename:
-        return None
-
-    # Check file extension
-    ext = Path(file.filename).suffix.lower()
-    if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid file type '{ext}'. Allowed: JPG, PNG, WebP, GIF."
-        )
-
-    # Read and check size
-    content = await file.read()
-    if len(content) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File size exceeds the 5 MB limit."
-        )
-
-    # Generate unique filename to avoid collisions
-    unique_name = f"{uuid.uuid4().hex}{ext}"
-    destination = UPLOADS_DIR / unique_name
-    destination.write_bytes(content)
-
-    return f"/uploads/{unique_name}"
-
 
 # ==========================================
 # 1. Missing Tickets (Student Reports)
 # ==========================================
 
 @router.post("/missing", status_code=status.HTTP_201_CREATED)
-async def create_missing_ticket(
+def create_missing_ticket(
     request: Request,
     item_name: str = Form(..., description="Name of the missing item"),
     category: str = Form(..., description="Item category"),
@@ -82,8 +43,7 @@ async def create_missing_ticket(
     date_lost: str = Form(..., description="ISO date when item was lost (e.g. 2026-09-11)"),
     time_lost: Optional[str] = Form(None),
     locations: str = Form(..., description="Possible locations where item was lost"),
-    description: Optional[str] = Form(None),
-    photo: Optional[UploadFile] = File(None)
+    description: Optional[str] = Form(None)
 ):
     """
     Student reports a missing item ("Lost Something?").
@@ -101,22 +61,20 @@ async def create_missing_ticket(
             detail=f"Invalid category '{category}'. Valid options: {CATEGORIES}"
         )
 
-    photo_path = await save_uploaded_photo(photo)
-
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
             """
             INSERT INTO missing_tickets (
                 student_id, item_name, category, brand, color,
-                date_lost, time_lost, locations, description, photo_path, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open')
+                date_lost, time_lost, locations, description, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'open')
             """,
             (
                 user["id"], item_name.strip(), category, brand.strip() if brand else None,
                 color.strip() if color else None, date_lost.strip(),
                 time_lost.strip() if time_lost else None, locations.strip(),
-                description.strip() if description else None, photo_path
+                description.strip() if description else None
             )
         )
         new_ticket_id = cursor.lastrowid
@@ -272,7 +230,7 @@ def update_missing_ticket(ticket_id: int, payload: UpdateMissingTicketRequest, r
 # ==========================================
 
 @router.post("/lost", status_code=status.HTTP_201_CREATED)
-async def create_lost_item_ticket(
+def create_lost_item_ticket(
     request: Request,
     item_name: str = Form(..., description="Name of the found item"),
     category: str = Form(..., description="Category"),
@@ -282,8 +240,7 @@ async def create_lost_item_ticket(
     time_found: Optional[str] = Form(None),
     location_found: str = Form(..., description="Location where item was found"),
     description: Optional[str] = Form(None),
-    ticket_status: Optional[str] = Form("unclaimed", alias="status"),
-    photo: Optional[UploadFile] = File(None)
+    ticket_status: Optional[str] = Form("unclaimed", alias="status")
 ):
     """
     Staff logs a found item ("Found Something?").
@@ -306,22 +263,20 @@ async def create_lost_item_ticket(
             detail=f"Invalid status '{ticket_status}'."
         )
 
-    photo_path = await save_uploaded_photo(photo)
-
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
             """
             INSERT INTO lost_item_tickets (
                 logged_by, item_name, category, brand, color,
-                date_found, time_found, location_found, description, photo_path, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                date_found, time_found, location_found, description, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 user["id"], item_name.strip(), category, brand.strip() if brand else None,
                 color.strip() if color else None, date_found.strip(),
                 time_found.strip() if time_found else None, location_found.strip(),
-                description.strip() if description else None, photo_path, ticket_status
+                description.strip() if description else None, ticket_status
             )
         )
         new_item_id = cursor.lastrowid

@@ -3,17 +3,17 @@ test_e2e_full.py - Comprehensive End-to-End Test for Stage 7 Polish & Deployment
 Covers:
 1. Database auto-initialization check
 2. Student registration & authenticated session
-3. Missing ticket report submission with photo attachment
-4. Staff login & found item intake with photo attachment
+3. Missing ticket report submission
+4. Staff login & found item intake
 5. Automated matching engine verification (category + secondary match)
 6. Notification delivery & privacy guard (no found details shown to student)
 7. Multi-student conflict transition to 'pending_verification'
 8. Staff in-person verification: winning resolution, competing rejection
 9. Returned items history
 10. Strict 'no delete' check (HTTP 405 on DELETE)
+11. Image upload endpoints fully removed (returns 404)
 """
 
-import io
 import time
 import random
 from fastapi.testclient import TestClient
@@ -55,8 +55,7 @@ def test_full_pipeline():
     assert res.json()["user"]["username"] == unique_id
     print("✅ 3. Session cookie verified for Student 1")
 
-    # 3. Student 1 files a Missing Ticket with Photo Attachment
-    fake_photo_bytes = io.BytesIO(b"fake-image-bytes-simulating-calculator-photo")
+    # 3. Student 1 files a Missing Ticket
     missing_data = {
         "item_name": "Black Casio scientific calculator",
         "category": "Electronics",
@@ -69,12 +68,11 @@ def test_full_pipeline():
     }
     res = student1_client.post(
         "/api/tickets/missing",
-        data=missing_data,
-        files={"photo": ("calculator.png", fake_photo_bytes, "image/png")}
+        data=missing_data
     )
     assert res.status_code == 201, f"Missing ticket submission failed: {res.text}"
     ticket1_id = res.json()["ticket_id"]
-    print(f"✅ 4. Missing Ticket #{ticket1_id} created with photo attachment")
+    print(f"✅ 4. Missing Ticket #{ticket1_id} created successfully")
 
     # 4. Staff logs in
     staff_client = TestClient(app)
@@ -83,7 +81,6 @@ def test_full_pipeline():
     print("✅ 5. Staff authenticated: 'admin'")
 
     # 5. Staff logs a Found Item matching Student 1's report
-    fake_found_photo = io.BytesIO(b"fake-found-photo-bytes")
     found_data = {
         "item_name": "Casio fx-991ES Plus calculator",
         "category": "Electronics",
@@ -97,8 +94,7 @@ def test_full_pipeline():
     }
     res = staff_client.post(
         "/api/tickets/lost",
-        data=found_data,
-        files={"photo": ("found_casio.jpg", fake_found_photo, "image/jpeg")}
+        data=found_data
     )
     assert res.status_code == 201
     lost_item_id = res.json()["item_id"]
@@ -178,16 +174,10 @@ def test_full_pipeline():
     assert res.status_code == 405, "DELETE route should NOT exist!"
     print("✅ 13. Security verified: DELETE method is strictly forbidden (HTTP 405)")
 
-    # 12. File upload size limit enforcement (> 5 MB rejected)
-    oversized_file = io.BytesIO(b"0" * (6 * 1024 * 1024)) # 6 MB
-    res = student1_client.post(
-        "/api/tickets/missing",
-        data=missing_data,
-        files={"photo": ("huge.png", oversized_file, "image/png")}
-    )
-    assert res.status_code == 400
-    assert "5 MB" in res.json()["detail"]
-    print("✅ 14. File upload size guard verified: 6 MB rejected (HTTP 400)")
+    # 12. Complete Image Removal Check: Verify /uploads/ is not mounted (HTTP 404)
+    res = client.get("/uploads/test.png")
+    assert res.status_code == 404, "Image upload directory should NOT be mounted!"
+    print("✅ 14. Image feature removal verified: /uploads/ is completely absent (HTTP 404)")
 
     print("\n==================================================")
     print("🎉 ALL 14 END-TO-END PIPELINE CHECKS PASSED 100%!")

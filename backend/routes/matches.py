@@ -7,7 +7,7 @@ Endpoints:
 - PUT /api/matches/{id}/reject (Staff rejects invalid match)
 
 Important Privacy Rule:
-Students are NEVER shown the specific details (description, photo, location found) of the found item.
+Students are NEVER shown the specific details (description, location found) of the found item.
 Verification must occur in-person at the Lost and Found office.
 """
 
