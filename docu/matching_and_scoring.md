@@ -1,128 +1,97 @@
-# FINDR — Matching Algorithm & Scoring Architecture
+# How Matching & Scoring Works
 
-> **System**: Fast Item Notification, Detection, and Recovery (FINDR)  
-> **Institution**: Cainta Catholic College (CCC)  
-> **Source Code**: [`backend/utils/matcher.py`](file:///D:/Documents/_Non-admin%20Files/FINDR_files/FINDR_orig/backend/utils/matcher.py)
+Quick rundown of how FINDR matches lost items with found items and how the score works.
 
 ---
 
-## 1. Flowchart: Matching & Scoring Logic
-
-The following Mermaid diagram outlines the step-by-step decision tree executed whenever a ticket is submitted:
+## 1. Flowchart
 
 ```mermaid
 flowchart TD
-    Start["Ticket Event Triggered<br>(Missing Report or Found Item Intake)"] --> FetchCandidates["Query Active Candidate Tickets<br>(Missing: open/matched | Found: unclaimed/pending_verification)"]
+    Start["New Report Submitted<br>(Missing or Found)"] --> GetCandidates["Check active tickets in DB"]
     
-    FetchCandidates --> CatCheck{"Category Matches?<br>(missing.category == lost.category)"}
+    GetCandidates --> CheckCat{"Same Category?"}
+    CheckCat -- "No" --> NoMatch["No Match (Score = 0.0)<br>Stops right here"]
+    CheckCat -- "Yes" --> BaseScore["Base score = 0.40"]
+
+    BaseScore --> CheckColor{"Same Color?"}
+    CheckColor -- "Yes" --> ColorPts["Add +0.20"]
+    CheckColor -- "No" --> CheckBrand{"Same Brand?"}
+    ColorPts --> CheckBrand
+
+    CheckBrand -- "Yes" --> BrandPts["Add +0.20"]
+    CheckBrand -- "No" --> CheckWords{"Words overlap in name/desc?"}
+    BrandPts --> CheckWords
+
+    CheckWords -- "Yes" --> WordPts["Add up to +0.20"]
+    CheckWords -- "No" --> GotSecondary{"Matched at least 1 extra thing?<br>(Color, Brand, or Words)"}
+    WordPts --> GotSecondary
+
+    GotSecondary -- "No" --> DropIt["No Match (Score = 0.0)<br>Category alone isn't enough"]
+    GotSecondary -- "Yes" --> ItsAMatch["It's a Match!<br>Score: 0.50 to 1.00"]
+
+    ItsAMatch --> SaveMatch["Save to 'matches' table (pending)"]
+    SaveMatch --> WhoMatched{"How many students matched this found item?"}
     
-    CatCheck -- "No" --> RejectCat["Reject Match<br>Final Score = 0.0 (No Match)"]
-    CatCheck -- "Yes" --> BaseScore["Set Base Score = 0.40 (40%)<br>Initialize Criteria Count = 0"]
+    WhoMatched -- "Just 1 student" --> Single["Notify student to visit office.<br>Item stays 'unclaimed'."]
+    WhoMatched -- "2 or more students" --> Conflict["Conflict! Set item to 'pending_verification'.<br>Notify all matched students & staff."]
 
-    BaseScore --> ColorCheck{"Color Match?<br>(Case-insensitive substring)"}
-    ColorCheck -- "Yes" --> AddColor["Score += 0.20<br>Criteria Count += 1"]
-    ColorCheck -- "No" --> BrandCheck{"Brand Match?<br>(Case-insensitive substring)"}
-    AddColor --> BrandCheck
+    Single --> Office["Student visits L&F office at Balbago"]
+    Conflict --> Office
 
-    BrandCheck -- "Yes" --> AddBrand["Score += 0.20<br>Criteria Count += 1"]
-    BrandCheck -- "No" --> KeywordCheck{"Keyword Overlap?<br>(item_name + description words)"}
-    AddBrand --> KeywordCheck
-
-    KeywordCheck -- "Yes (1+ overlapping words)" --> AddKeywords["Score += min(0.20, count * 0.10)<br>Criteria Count += 1"]
-    KeywordCheck -- "No" --> EvalThreshold{"Criteria Count >= 1?<br>(At least 1 secondary trait)"}
-    AddKeywords --> EvalThreshold
-
-    EvalThreshold -- "No" --> RejectSecondary["Reject Match<br>Score = 0.0 (Insufficient criteria)"]
-    EvalThreshold -- "Yes" --> Qualify["Match Qualified!<br>Final Score = min(1.0, Score)"]
-
-    Qualify --> SaveMatch["Insert Row into 'matches' Table<br>(status = 'pending', match_score)"]
-    SaveMatch --> ConflictCheck{"How many students match this found item?"}
-    
-    ConflictCheck -- "Single Match (1 Student)" --> SingleFlow["Missing Ticket -> 'matched'<br>Lost Item -> 'unclaimed'<br>Student Alerted (Privacy guarded)"]
-    ConflictCheck -- "Multiple Matches (2+ Students)" --> ConflictFlow["Lost Item status -> 'pending_verification'<br>All Matched Students Alerted<br>Staff Alerted of Conflict"]
-
-    SingleFlow --> OfficeVerif["In-Person Verification at CCC Office"]
-    ConflictFlow --> OfficeVerif
-
-    OfficeVerif --> StaffAction{"Staff Inspects Physical Item & Verifies True Owner"}
-    StaffAction -- "Winning Student Verified" --> WinnerState["Lost Item -> 'claimed'<br>Missing Ticket -> 'resolved'<br>Match -> 'verified'<br>Appears in Returned Ledger"]
-    StaffAction -- "Competing Students" --> CompeteState["Match -> 'rejected'<br>Missing Ticket -> reverts to 'open'<br>Eligible for future matches"]
+    Office --> StaffDecides{"Staff inspects item in person"}
+    StaffDecides -- "Verified owner" --> Winner["Item marked 'claimed'<br>Student report marked 'resolved'"]
+    StaffDecides -- "Other students" --> Loser["Their ticket goes back to 'open'<br>Can match future items"]
 ```
 
 ---
 
-## 2. Sequence Diagram: End-to-End Workflow
+## 2. Points Breakdown
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Student as Student
-    actor Staff as CCC Staff
-    participant API as FastAPI Backend
-    participant Matcher as Matcher Engine
-    participant DB as SQLite DB
+Total score is between **0.0** and **1.0** (0% to 100%).
 
-    alt Student reports a missing item
-        Student->>API: POST /api/tickets/missing
-        API->>DB: INSERT missing_ticket (status='open')
-        API->>Matcher: run_matcher_for_missing_ticket()
-    else Staff logs a found item
-        Staff->>API: POST /api/tickets/lost
-        API->>DB: INSERT lost_item_ticket (status='unclaimed')
-        API->>Matcher: run_matcher_for_lost_item()
-    end
+| What it checks | Points | Notes |
+|---|---|---|
+| **Category** | **+0.40** | **Must match.** If this fails, everything stops and score is `0.0`. An umbrella won't match a phone. |
+| **Color** | **+0.20** | Simple text check (e.g., "black" matches "matte black"). |
+| **Brand** | **+0.20** | Simple text check (e.g., "casio" matches "Casio fx-991"). |
+| **Keywords** | **up to +0.20** | Compares words in item name and description (ignores words like "the", "a", "lost"). |
 
-    Matcher->>DB: Query active candidate tickets
-    Matcher->>Matcher: Calculate match (Category + Color + Brand + Keywords)
-    
-    alt Match Qualified (Score >= 0.50)
-        Matcher->>DB: INSERT INTO matches (status='pending', match_score)
-        Matcher->>DB: UPDATE missing_tickets SET status='matched'
-        alt Conflict Detected (2+ students match 1 item)
-            Matcher->>DB: UPDATE lost_item_tickets SET status='pending_verification'
-            Matcher->>DB: INSERT notification (Staff Conflict Alert)
-        end
-        Matcher->>DB: INSERT notification (Student: In-Person Office Notice)
-    end
+### The main rule
+To actually count as a match:
+- Must have the **same Category**
+- **PLUS at least 1 other thing** (Color, Brand, or Keywords)
 
-    opt In-Person Verification at Campus Office
-        Student->>Staff: Visits office with Student ID and physical proof
-        Staff->>API: PUT /api/matches/{id}/verify
-        API->>DB: UPDATE matches SET status='verified'
-        API->>DB: UPDATE lost_item_tickets SET status='claimed'
-        API->>DB: UPDATE missing_tickets SET status='resolved'
-        API->>DB: UPDATE competing matches SET status='rejected', missing_tickets revert to 'open'
-    end
-```
+If only the category matches and nothing else, it gets tossed out (score = 0.0). We don't want every lost ID matching every found ID.
 
 ---
 
-## 3. Scoring Rubric Breakdown
+## 3. Why is there a score?
 
-| Criterion | Points | Evaluation Rule | Example |
-|---|---|---|---|
-| **Category** *(Mandatory Gatekeeper)* | **+0.40** (40%) | **Strict exact equality.** If category does not match, the entire match fails immediately (Score = `0.0`). | `Electronics` == `Electronics` (+0.40)<br>`Personal Items` != `Clothing` (0.0) |
-| **Color** | **+0.20** (20%) | Case-insensitive substring match. | `"black"` matches `"matte black"` (+0.20) |
-| **Brand** | **+0.20** (20%) | Case-insensitive substring match. | `"casio"` matches `"Casio fx-991CW"` (+0.20) |
-| **Keywords** | **+0.10 to +0.20** (up to 20%) | Strips common stop words (`the`, `a`, `lost`, `found`, etc.) and checks for overlapping words between name and description. | 1 matching word = +0.10<br>2+ matching words = +0.20 |
-
-### Qualification Threshold
-- **Minimum Criteria**: Must match **Category PLUS at least 1 secondary trait** (`matched_criteria >= 1`).
-- **Score Range**: Valid matches range from **0.50 (50%)** to **1.00 (100%)**.
-- Items below `0.50` or with non-matching categories are rejected.
+- **Sorting**: If staff has 4 black umbrellas in the office, the one with 95% (same brand + model) shows up first before the 60% ones.
+- **Tells you how close it is**:
+  - `0.60` = kinda close (same category + color, unknown brand).
+  - `0.95` = almost definitely it (category, color, brand, and model words all match).
+- **Helps staff verify**: Staff doesn't have to read every single ticket. The highest score is probably the right one.
 
 ---
 
-## 4. Why There is a Match Score
+## 4. Conflicts (Multiple people matching 1 item)
 
-1. **Ranking Candidates for Staff**: When multiple items of the same category exist (e.g., several black umbrellas or calculators), the score sorts matches so staff sees the **strongest, highest-probability candidates first**.
-2. **Prioritizing Multi-Attribute Matches**: Distinguishes between loose matches (e.g. only category + color = 60%) versus precise matches (category + color + brand + exact model keywords = 95%).
-3. **Objective In-Person Verification**: Serves as a transparent audit trail for why the system alerted students and staff.
+If 2 students lost a black Casio calculator and staff logs 1 black Casio calculator:
+1. Found item changes to `pending_verification`.
+2. Both students get a notification to visit the office.
+3. Staff checks the physical item (stickers, serials, scratches, proof).
+4. Staff hits **Verify** on the real owner:
+   - Winner gets marked `resolved` and item is `claimed`.
+   - The other student's ticket gets set back to `open` so it can match future found items.
 
 ---
 
-## 5. Student Privacy & Security Guard
+## 5. Privacy note
 
-- When a match is detected, the student notification **never reveals sensitive details** of the found item:
-  > *"We found a possible match for your missing [Item Name]. Please visit the Lost and Found Office for in-person verification."*
-- Exact pickup location, finder notes, and staff records remain hidden from students to prevent fraudulent claims. Ownership is validated physically in the office.
+Students **never** see photos or where the item was found.
+Their notification just says:
+> *"We found a possible match for your missing [Item]. Please visit the Lost and Found Office for in-person verification."*
+
+This stops people from looking at the details and pretending it's theirs.
