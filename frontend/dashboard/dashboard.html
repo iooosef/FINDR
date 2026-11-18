@@ -23,9 +23,8 @@
             <ul class="nav-links hide-on-mobile">
                 <li><a href="#home" class="active">Home</a></li>
                 <!-- Nav link dynamically labeled for student vs staff -->
-                <li><a href="#main-section" id="nav-main-link">My Reports</a></li>
+                <li><a href="#student-reports" id="nav-main-link">My Reports</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#contact">Contact</a></li>
                 
                 <!-- Notification Bell -->
                 <li>
@@ -73,9 +72,8 @@
         </div>
         <ul class="sidebar-links">
             <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
-            <li><a href="#main-section" id="sidebar-main-link" onclick="toggleSidebar()">My Reports</a></li>
+            <li><a href="#student-reports" id="sidebar-main-link" onclick="toggleSidebar()">My Reports</a></li>
             <li><a href="#how-it-works" onclick="toggleSidebar()">How It Works</a></li>
-            <li><a href="#contact" onclick="toggleSidebar()">Contact Us</a></li>
             <li><a href="#" id="sidebar-logout-btn" onclick="toggleSidebar()">Logout</a></li>
         </ul>
     </aside>
@@ -146,7 +144,7 @@
         <!-- VIEW 1: STUDENT VIEW (Default for Students) -->
         <!-- ========================================== -->
         <section class="reports-section" id="student-section">
-            <div class="section-container" id="main-section">
+            <div class="section-container" id="student-reports">
                 <div class="section-header-flex">
                     <div>
                         <h2 class="section-title">My Reported Missing Items</h2>
@@ -179,7 +177,7 @@
         <!-- VIEW 2: STAFF VIEW (Displayed for Staff)   -->
         <!-- ========================================== -->
         <section class="reports-section" id="staff-section" style="display: none;">
-            <div class="section-container">
+            <div class="section-container" id="staff-hub">
                 <div class="section-header-flex">
                     <div>
                         <h2 class="section-title">Staff Management Hub</h2>
@@ -193,7 +191,7 @@
                 <!-- Staff Statistics Overview -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon stat-icon-blue">
+                        <div class="stat-icon stat-icon-charcoal">
                             <i class="fa-solid fa-box-open"></i>
                         </div>
                         <div>
@@ -749,7 +747,7 @@
     <div class="toast-container" id="toast-container"></div>
 
     <!-- Footer -->
-    <footer id="contact">
+    <footer>
         <div class="footer-container">
             <div class="footer-brand">
                 <img src="https://www.caintacatholiccollege.edu.ph/wp-content/uploads/2023/09/seal2-1.png" alt="CCC Crest">
@@ -758,12 +756,6 @@
                     <span>Christ's Faithful in Communion and Mission</span>
                 </div>
             </div>
-
-            <ul class="footer-links">
-                <li><a href="#privacy-policy">Privacy Policy</a></li>
-                <li><a href="#terms-of-use">Terms of Use</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-            </ul>
         </div>
     </footer>
 

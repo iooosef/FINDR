@@ -14,6 +14,8 @@ Covers:
 """
 
 import io
+import time
+import random
 from fastapi.testclient import TestClient
 from backend.main import app
 from backend.database import get_db
@@ -34,22 +36,23 @@ def test_full_pipeline():
     assert "FINDR" in res.text
     print("✅ 1. Health check & Frontend index accessible")
 
-    # 2. Student 1 Registration
+    # 2. Student 1 Registration (Random ID to allow repeated runs)
+    unique_id = f"2026-{random.randint(1000, 9999)}-{int(time.time()) % 1000}"
     student1_client = TestClient(app)
     reg_payload = {
         "name": "Maria Clara Santos",
-        "id_number": "2026-7788",
+        "id_number": unique_id,
         "password": "securepassword123"
     }
     res = student1_client.post("/api/auth/register", json=reg_payload)
     assert res.status_code == 201, f"Registration failed: {res.text}"
     s1_id = res.json()["user"]["id"]
-    print(f"✅ 2. Student registered successfully: ID='2026-7788' (User #{s1_id})")
+    print(f"✅ 2. Student registered successfully: ID='{unique_id}' (User #{s1_id})")
 
     # Verify session persists
     res = student1_client.get("/api/auth/me")
     assert res.status_code == 200
-    assert res.json()["user"]["username"] == "2026-7788"
+    assert res.json()["user"]["username"] == unique_id
     print("✅ 3. Session cookie verified for Student 1")
 
     # 3. Student 1 files a Missing Ticket with Photo Attachment

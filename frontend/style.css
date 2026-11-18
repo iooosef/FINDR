@@ -1,30 +1,30 @@
 :root {
-    /* Brand Palette centered on #FFCE1B */
+    /* Brand Palette: Vibrant Gold (#FFCE1B) + Obsidian Charcoal (Zero Blue) */
     --gold-main: #FFCE1B;
     --gold-hover: #E5B710;
     --gold-dark: #C89C06;
-    --gold-light: #FFF6D6;
+    --gold-light: #FFF9E6;
 
-    --navy-main: #0B2038;
-    --navy-hover: #133256;
-    --navy-dark: #071626;
+    --dark-main: #18181B;
+    --dark-hover: #27272A;
+    --dark-deep: #09090B;
 
-    --bg-dark: #0A192F;
-    --bg-light: #F8FAFC;
+    --bg-dark: #121212;
+    --bg-light: #F4F4F5;
     --card-bg: #FFFFFF;
 
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #64748B;
-    --border-color: #E2E8F0;
+    --text-primary: #18181B;
+    --text-secondary: #52525B;
+    --text-muted: #71717A;
+    --border-color: #E4E4E7;
 
     --error-color: #DC2626;
     --error-bg: #FEE2E2;
     --success-color: #059669;
     --success-bg: #D1FAE5;
 
-    --shadow-soft: 0 10px 30px rgba(11, 32, 56, 0.15);
-    --shadow-strong: 0 20px 45px rgba(11, 32, 56, 0.25);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
+    --shadow-strong: 0 20px 45px rgba(0, 0, 0, 0.45);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -56,8 +56,8 @@ body::before {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    opacity: 0.25;
-    filter: blur(5px);
+    opacity: 0.22;
+    filter: blur(6px);
     z-index: -1;
 }
 
@@ -70,7 +70,7 @@ body::before {
     width: 820px;
     max-width: 100%;
     min-height: 520px;
-    border: 1px solid rgba(255, 206, 27, 0.2);
+    border: 1px solid rgba(255, 206, 27, 0.25);
 }
 
 .container form {
@@ -92,8 +92,8 @@ body::before {
 }
 
 .form-logo {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
 }
 
@@ -101,13 +101,13 @@ body::before {
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 1.5px;
-    color: var(--navy-main);
+    color: var(--dark-main);
 }
 
 .container h1 {
     font-size: 24px;
     font-weight: 800;
-    color: var(--navy-main);
+    color: var(--dark-main);
     margin-bottom: 4px;
 }
 
@@ -187,12 +187,12 @@ body::before {
 
 .input-group input:focus + i,
 .input-group:focus-within i {
-    color: var(--navy-main);
+    color: var(--dark-main);
 }
 
 /* Submit Button */
 .container button[type="submit"] {
-    background-color: var(--navy-main);
+    background-color: var(--dark-main);
     color: #FFFFFF;
     font-size: 13.5px;
     padding: 12px 40px;
@@ -209,13 +209,13 @@ body::before {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 4px 14px rgba(11, 32, 56, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .container button[type="submit"]:hover {
-    background-color: var(--navy-hover);
+    background-color: var(--dark-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(11, 32, 56, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 .container button[type="submit"]:active {
@@ -291,7 +291,7 @@ body::before {
 /* Vibrant Gold Gradient */
 .toggle {
     background: linear-gradient(135deg, #FFDE59 0%, #FFCE1B 50%, #F59E0B 100%);
-    color: var(--navy-main);
+    color: var(--dark-main);
     position: relative;
     left: -100%;
     height: 100%;
@@ -320,34 +320,34 @@ body::before {
 }
 
 .toggle-logo {
-    width: 54px;
-    height: 54px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;
     margin-bottom: 12px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     padding: 6px;
     border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(11, 32, 56, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .toggle-panel h1 {
     font-size: 26px;
     font-weight: 800;
-    color: var(--navy-main);
+    color: var(--dark-main);
     margin-bottom: 8px;
 }
 
 .toggle-panel p {
     font-size: 13.5px;
     line-height: 22px;
-    color: #1E293B;
+    color: #27272A;
     margin-bottom: 24px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Button on toggle panel */
 .btn-toggle {
-    background-color: var(--navy-main);
+    background-color: var(--dark-main);
     color: #FFFFFF;
     font-size: 13px;
     font-weight: 700;
@@ -358,13 +358,13 @@ body::before {
     border-radius: 30px;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 4px 14px rgba(11, 32, 56, 0.25);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .btn-toggle:hover {
     background-color: transparent;
-    color: var(--navy-main);
-    border-color: var(--navy-main);
+    color: var(--dark-main);
+    border-color: var(--dark-main);
     transform: translateY(-2px);
 }
 

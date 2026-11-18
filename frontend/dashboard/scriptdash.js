@@ -179,9 +179,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         staffSection.style.display = 'none';
 
         if (btnOpenLostModal) btnOpenLostModal.style.display = 'inline-flex';
-        if (heroActionLink) heroActionLink.textContent = 'Track My Report';
-        if (navMainLink) navMainLink.textContent = 'My Reports';
-        if (sidebarMainLink) sidebarMainLink.textContent = 'My Reports';
+        
+        if (heroActionLink) {
+            heroActionLink.innerHTML = '<i class="fa-regular fa-clipboard"></i> Track My Report';
+            heroActionLink.onclick = (e) => {
+                e.preventDefault();
+                studentSection.scrollIntoView({ behavior: 'smooth' });
+            };
+        }
+        if (navMainLink) {
+            navMainLink.textContent = 'My Reports';
+            navMainLink.onclick = (e) => {
+                e.preventDefault();
+                studentSection.scrollIntoView({ behavior: 'smooth' });
+            };
+        }
+        if (sidebarMainLink) {
+            sidebarMainLink.textContent = 'My Reports';
+            sidebarMainLink.onclick = (e) => {
+                e.preventDefault();
+                studentSection.scrollIntoView({ behavior: 'smooth' });
+            };
+        }
 
         // Student "Found Something?" opens static instructions card
         btnOpenFoundModal.addEventListener('click', () => {
@@ -198,11 +217,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Hide "Lost Something?" hero button for staff (staff only log found items)
         if (btnOpenLostModal) btnOpenLostModal.style.display = 'none';
+
         if (heroActionLink) {
             heroActionLink.innerHTML = '<i class="fa-solid fa-list-check"></i> Open Management Hub';
+            heroActionLink.onclick = (e) => {
+                e.preventDefault();
+                staffSection.scrollIntoView({ behavior: 'smooth' });
+            };
         }
-        if (navMainLink) navMainLink.textContent = 'Staff Hub';
-        if (sidebarMainLink) sidebarMainLink.textContent = 'Staff Hub';
+        if (navMainLink) {
+            navMainLink.textContent = 'Staff Hub';
+            navMainLink.onclick = (e) => {
+                e.preventDefault();
+                staffSection.scrollIntoView({ behavior: 'smooth' });
+            };
+        }
+        if (sidebarMainLink) {
+            sidebarMainLink.textContent = 'Staff Hub';
+            sidebarMainLink.onclick = (e) => {
+                e.preventDefault();
+                staffSection.scrollIntoView({ behavior: 'smooth' });
+            };
+        }
 
         // Staff "Found Something?" opens functional intake form modal
         btnOpenFoundModal.addEventListener('click', openStaffFoundModal);
