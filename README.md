@@ -13,8 +13,22 @@ Use these pre-seeded accounts to test student and staff workflows:
 | **Staff Admin** | `admin` | FINDR Administrator | `adminpassword123` | Management Hub, Found Intake Form, 4 Management Tables, Verification Controls |
 | **Student 1** | `2026-0001` | Juan Dela Cruz | `studentpassword123` | Student Dashboard, "Lost Something?" Report Form, Match Notifications |
 | **Student 2** | `2026-0002` | Maria Clara Santos | `studentpassword123` | Student Dashboard, "Lost Something?" Report Form, Match Notifications |
+| **Student 3** | `2026-0003` | Mark Joseph Bautista | `studentpassword123` | Student Dashboard, "Lost Something?" Report Form, Match Notifications |
+| **Student 4** | `2026-0004` | Angelo Reyes | `studentpassword123` | Student Dashboard, "Lost Something?" Report Form, Match Notifications |
+| **Student 5** | `2026-0005` | Alyssa Mae Rivera | `studentpassword123` | Student Dashboard, "Lost Something?" Report Form, Match Notifications |
 
 > **Note:** Students can also self-register a new account anytime on the login page using their own Student ID number.
+
+### 📋 Pre-Seeded Demonstration Scenarios
+
+| Scenario | Missing Item (Student) | Found Item (Staff) | Status / Workflow State |
+|---|---|---|---|
+| **1. Received & Claimed** | Casio Calculator (Juan `2026-0001`) | Casio Calculator (Staff) | Missing: `resolved`, Found: `claimed`, Match: `verified`. Appears in Returned Ledger. |
+| **2. Not Received (Open)** | AquaFlask Tumbler (Maria `2026-0002`) | — | Missing: `open` (no match turned in yet). |
+| **2. Not Received (Unclaimed)** | — | Fossil Watch & PE Jacket (Staff) | Found: `unclaimed` (no student reports matching). |
+| **3. Matched & Pending** | Leather ID Holder (Mark `2026-0003`) | Brown ID Holder (Staff) | Missing: `matched`, Found: `unclaimed`, Match: `pending`. Unread notification sent to Mark. |
+| **4. Conflict: 1 Lost, 2 Missing** | AirPods Case (Juan `2026-0001`) & AirPods 2 (Angelo `2026-0004`) | AirPods Pro 2nd Gen Case (Staff) | Found: `pending_verification`, both Missing: `matched`. Both students notified for office verification. |
+| **5. Conflict: 1 Missing, 2 Lost** | Fibrella Umbrella (Alyssa `2026-0005`) | Fibrella Umbrella + Generic Umbrella (Staff) | Missing: `matched`, both Found: `pending_verification`. Multiple candidate matches. |
 
 ---
 
